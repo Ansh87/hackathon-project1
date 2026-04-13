@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565C0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <path d="M128 20 C128 20 80 80 80 120 C80 142 95 160 115 165 L115 200 C115 205 118 208 123 208 L133 208 C138 208 141 205 141 200 L141 165 C161 160 176 142 176 120 C176 80 128 20 128 20 Z" fill="url(#dropGrad)"/>
+  <path d="M115 165 L115 200 C115 205 118 208 123 208 L185 208 C192 208 198 202 198 195 L198 145 L220 145 L151.5 85 L141 95 C161 100 176 118 176 140 C176 162 161 180 141 185 L141 200 C141 205 138 208 133 208 L123 208 C118 208 115 205 115 200 L115 165 Z" fill="#FF6F00"/>
+  <rect x="123" y="175" width="10" height="15" fill="#1565C0"/>
+  <rect x="133" y="175" width="10" height="15" fill="#E65100"/>
+</svg>
