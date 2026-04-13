@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FloodScore</title>
+    <style>
+      :root {
+        --bg: #070f1d;
+        --panel: #111a2e;
+        --panel-soft: #0d1629;
+        --text: #f8fafc;
+        --muted: #9fb0cf;
+        --green: #22c55e;
+        --yellow: #eab308;
+        --red: #ef4444;
+        --accent: #60a5fa;
+        --gauge-angle: -180deg;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 380px;
+        min-height: 620px;
+        background: radial-gradient(circle at top right, #13213f 0%, var(--bg) 52%);
+        color: var(--text);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+      }
+
+      .wrap {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .panel {
+        background: linear-gradient(160deg, rgba(17, 26, 46, 0.98), rgba(13, 22, 41, 0.94));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      }
+
+      .header-title {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+      }
+
+      .logo-red {
+        color: #ef4444;
+      }
+
+      .address {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .gauge-shell {
+        position: relative;
+        width: 210px;
+        height: 210px;
+        margin: 4px auto 0;
+      }
+
+      .gauge-ring {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(var(--green), #84cc16, var(--yellow), #f97316, var(--red));
+        display: grid;
+        place-items: center;
+      }
+
+      .gauge-inner {
+        width: 78%;
+        height: 78%;
+        border-radius: 50%;
+        background: #0c1527;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .risk-score {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .risk-label {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .score-grid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .score-chip {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 8px;
+      }
+
+      .score-chip-label {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .score-chip-value {
+        margin-top: 4px;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .needle {
+        position: absolute;
+        width: 4px;
+        height: 84px;
+        left: 50%;
+        bottom: 50%;
+        transform-origin: 50% 100%;
+        transform: translateX(-50%) rotate(-180deg);
+        transition: transform 1.25s cubic-bezier(0.18, 0.95, 0.22, 1);
+        z-index: 5;
+      }
+
+      .needle::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(180deg, #f8fafc 0%, #94a3b8 100%);
+        box-shadow: 0 0 10px rgba(248, 250, 252, 0.35);
+      }
+
+      .needle-cap {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #e2e8f0;
+        border: 3px solid #1e293b;
+        z-index: 6;
+      }
+
+      .section-title {
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #bfd2f5;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      .bank-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .subpanel {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .subpanel h4 {
+        margin: 0 0 8px;
+        font-size: 12px;
+      }
+
+      .metric {
+        margin: 0 0 6px;
+        font-size: 12px;
+        color: #dbe7ff;
+        line-height: 1.35;
+      }
+
+      .price-big {
+        font-size: 24px;
+        font-weight: 800;
+        color: #86efac;
+        margin-top: 6px;
+        line-height: 1.1;
+      }
+
+      .projection {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        gap: 12px;
+        margin-top: 8px;
+        min-height: 145px;
+        padding: 6px 2px 0;
+      }
+
+      .bar-wrap {
+        flex: 1;
+        text-align: center;
+      }
+
+      .bar {
+        width: 66px;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 8px 8px 4px 4px;
+        min-height: 18px;
+        height: 30px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        color: #041018;
+        font-size: 10px;
+        font-weight: 700;
+        padding-top: 5px;
+        transition: height 0.8s ease;
+      }
+
+      .bar.low {
+        background: linear-gradient(180deg, #86efac, #22c55e);
+      }
+
+      .bar.medium {
+        background: linear-gradient(180deg, #fde68a, #f59e0b);
+      }
+
+      .bar.high {
+        background: linear-gradient(180deg, #fca5a5, #ef4444);
+      }
+
+      .bar-label {
+        margin-top: 6px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .footer {
+        font-size: 10px;
+        line-height: 1.45;
+        color: #93a6ca;
+        text-align: center;
+      }
+
+      .error {
+        color: #fecaca;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="panel">
+        <div class="header-title"><span class="logo-red">Flood</span>Score</div>
+        <div id="propertyAddress" class="address">Detecting property...</div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">Overall Climate Risk Score</div>
+        <div class="gauge-shell">
+          <div class="gauge-ring">
+            <div class="gauge-inner">
+              <div id="riskScore" class="risk-score">--</div>
+              <div id="riskLevel" class="risk-label">Calculating risk...</div>
+            </div>
+          </div>
+          <div id="needle" class="needle"></div>
+          <div class="needle-cap"></div>
+        </div>
+        <div class="score-grid">
+          <div class="score-chip">
+            <div class="score-chip-label">Flood score</div>
+            <div id="floodScore" class="score-chip-value">--</div>
+          </div>
+          <div class="score-chip">
+            <div class="score-chip-label">Earthquake score</div>
+            <div id="earthquakeScore" class="score-chip-value">--</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">Bank vs. You</div>
+        <div class="bank-grid">
+          <div class="subpanel">
+            <h4>🏦 What the Bank Sees</h4>
+            <p class="metric">2040 Climate-Adjusted Value:</p>
+            <p id="adjustedValue" class="metric"><strong>--</strong></p>
+            <p class="metric">Insurance Death Spiral:</p>
+            <p id="deathSpiral" class="metric"><strong>--</strong></p>
+            <p class="metric">Socio-Economic Threat:</p>
+            <p id="socioThreat" class="metric"><strong>--</strong></p>
+          </div>
+
+          <div class="subpanel">
+            <h4>👤 What You're Told</h4>
+            <p class="metric">Listing Price:</p>
+            <div id="listingPrice" class="price-big">--</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">2040 Projection</div>
+        <div class="projection">
+          <div class="bar-wrap">
+            <div id="barLow" class="bar low">&nbsp;</div>
+            <div id="barLowValue" class="bar-label">--</div>
+          </div>
+          <div class="bar-wrap">
+            <div id="barMedium" class="bar medium">&nbsp;</div>
+            <div id="barMediumValue" class="bar-label">--</div>
+          </div>
+          <div class="bar-wrap">
+            <div id="barHigh" class="bar high">&nbsp;</div>
+            <div id="barHighValue" class="bar-label">--</div>
+          </div>
+        </div>
+      </section>
+
+      <div id="errorBox" class="error"></div>
+
+      <footer class="footer">
+        Data sourced from FEMA NRI. FloodScore is a transparency tool, not financial advice.
+      </footer>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
