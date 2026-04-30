@@ -1,14 +1,7 @@
-const path = require('path');
-module.exports = {
-  allowedDevOrigins: ['192.168.86.24','10.250.12.134:8080','https://hackathon-project1-production-9a51.up.railway.app'],
-}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: process.env.NEXT_DIST_DIR || '.next',
-  output: process.env.NEXT_OUTPUT_MODE,
+  allowedDevOrigins: ['192.168.86.24', '10.250.12.134:8080', 'https://hackathon-project1-production-9a51.up.railway.app'],
   productionBrowserSourceMaps: false,
-  outputFileTracingRoot: path.join(__dirname, '../'),
-  turbopack: {},
   typescript: {
     ignoreBuildErrors: false,
   },
