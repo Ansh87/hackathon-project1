@@ -1,5 +1,7 @@
 const path = require('path');
-
+module.exports = {
+  allowedDevOrigins: ['192.168.86.24'],
+}
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
