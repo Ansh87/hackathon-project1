@@ -1,6 +1,6 @@
 const path = require('path');
 module.exports = {
-  allowedDevOrigins: ['192.168.86.24','10.250.12.134:8080'],
+  allowedDevOrigins: ['192.168.86.24','10.250.12.134:8080','https://hackathon-project1-production-9a51.up.railway.app'],
 }
 /** @type {import('next').NextConfig} */
 const nextConfig = {
