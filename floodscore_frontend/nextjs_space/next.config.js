@@ -1,6 +1,6 @@
 const path = require('path');
 module.exports = {
-  allowedDevOrigins: ['192.168.86.24'],
+  allowedDevOrigins: ['192.168.86.24','10.250.12.134:8080'],
 }
 /** @type {import('next').NextConfig} */
 const nextConfig = {
